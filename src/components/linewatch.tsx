@@ -1,13 +1,12 @@
 
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import type { DashboardData, ChartDataPoint, DistributionPoint } from '../lib/types';
 import { Zap, Power, AlertTriangle, Bot, Home as HomeIcon, Lightbulb, Server, Download } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Switch } from './ui/switch';
 import { Input } from './ui/input';
-import { Skeleton } from './ui/skeleton';
 import { cn } from '../lib/utils';
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartConfig } from './ui/chart';
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis, Defs, linearGradient, Stop } from 'recharts';
@@ -288,8 +287,6 @@ const Dashboard = ({ data, chartData, onRelayToggle }: { data: DashboardData, ch
                             <AreaChart 
                                 data={chartData}
                                 margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
-                                isAnimationActive={true}
-                                animationDuration={300}
                                 >
                                 <defs>
                                     <linearGradient id="colorAverageCurrent" x1="0" y1="0" x2="0" y2="1">
@@ -332,44 +329,12 @@ const Dashboard = ({ data, chartData, onRelayToggle }: { data: DashboardData, ch
     )
 }
 
-const LoadingSkeleton = () => (
-    <div className="flex flex-col h-screen">
-        <header className="flex items-center justify-between gap-3 px-8 py-4 border-b">
-            <div className='flex items-center gap-3'>
-                <Skeleton className="w-7 h-7" />
-                <Skeleton className="h-7 w-48" />
-            </div>
-            <Skeleton className="h-9 w-44" />
-        </header>
-        <div className="flex flex-1">
-            <aside className="w-full md:w-80 lg:w-96 p-6 flex flex-col gap-6 border-r">
-                <Skeleton className="h-48 w-full"/>
-                <Skeleton className="h-full w-full"/>
-            </aside>
-            <main className="flex-1 p-6 flex flex-col gap-6">
-                <div className="flex items-center gap-4">
-                    <Skeleton className="h-28 w-60" />
-                     {[...Array(4)].map((_, i) =>
-                        <div key={i} className="flex items-center gap-4">
-                            <Skeleton className="w-16 h-1" />
-                            <Skeleton className="h-28 w-60" />
-                        </div>
-                     )}
-                 </div>
-                 <Skeleton className="h-full w-full"/>
-            </main>
-        </div>
-    </div>
-)
-
-export default function LineWatch({ initialData }: { initialData: DashboardData }) {
+export default function LineWatchClient({ initialData }: { initialData: DashboardData }) {
     const [data, setData] = useState<DashboardData>(initialData);
     const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
-    const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
         document.documentElement.classList.add('dark');
-        setIsMounted(true);
 
         const unsub = onSnapshot(doc(db, "dashboard", "data"), (doc) => {
             if (doc.exists()) {
@@ -397,16 +362,10 @@ export default function LineWatch({ initialData }: { initialData: DashboardData 
         toggleRelay(id, status);
     };
 
-
-
     const handleThresholdChange = (value: number) => {
         updateSafetyThreshold(value);
     }
     
-    if (!isMounted || !data.transformer) {
-        return <LoadingSkeleton />;
-    }
-
     return (
         <div className="flex flex-col h-screen bg-background">
             <LineWatchHeader />
