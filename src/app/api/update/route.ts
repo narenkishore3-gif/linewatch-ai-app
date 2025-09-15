@@ -1,8 +1,8 @@
 
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/firebase';
+import { db } from '../../../lib/firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
-import type { DashboardData, DistributionPoint } from '@/lib/types';
+import type { DashboardData, DistributionPoint } from '../../../lib/types';
 
 export async function POST(request: Request) {
   try {
