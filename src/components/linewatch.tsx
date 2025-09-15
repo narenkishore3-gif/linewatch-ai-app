@@ -2,20 +2,20 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import type { DashboardData, ChartDataPoint, DistributionPoint } from '@/lib/types';
+import type { DashboardData, ChartDataPoint, DistributionPoint } from '../lib/types';
 import { Zap, Power, AlertTriangle, Bot, Home as HomeIcon, Lightbulb, Server, Download } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Switch } from '@/components/ui/switch';
-import { Input } from '@/components/ui/input';
-import { Skeleton } from '@/components/ui/skeleton';
-import { cn } from '@/lib/utils';
-import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartConfig } from '@/components/ui/chart';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { Switch } from './ui/switch';
+import { Input } from './ui/input';
+import { Skeleton } from './ui/skeleton';
+import { cn } from '../lib/utils';
+import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartConfig } from './ui/chart';
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis, Defs, linearGradient, Stop } from 'recharts';
 import { doc, onSnapshot } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
-import { toggleRelay, updateSafetyThreshold, getAllFilesAsJson } from '@/app/actions';
-import { useDebounce } from '@/hooks/use-debounce';
-import { Button } from '@/components/ui/button';
+import { db } from '../lib/firebase';
+import { toggleRelay, updateSafetyThreshold, getAllFilesAsJson } from '../app/actions';
+import { useDebounce } from '../hooks/use-debounce';
+import { Button } from './ui/button';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import {
@@ -28,7 +28,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from "./ui/alert-dialog"
 
 const chartConfig = {
   averageCurrent: {
